@@ -1,6 +1,7 @@
 import User from '../models/users';
 import Bcrypt from 'bcryptjs';
-import Token from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import Secrets from '../../config/secrets';
 
 const register = async (req,res) => {
     const {name, password, email} = req.body;
@@ -38,14 +39,12 @@ const register = async (req,res) => {
 const deleteAll = async (req,res) => {
     try{
         const del = User.remove({});
-        res.status(204).json({
+        return res.status(204).json({
             message:'deleted all user',
             response:del
         });
     } catch(e) {
-        console.log(e)
-
-        res.status(500).json({
+         return res.status(500).json({
             message:'failed to delete all users',
             error: e
         });
@@ -54,12 +53,53 @@ const deleteAll = async (req,res) => {
 
 
 const login = async (req,res) => {
-    
+    const {email, password} = req.body;
+
+    try {
+        const user = await User.find({email: email});
+
+        if (user && Bcrypt.compareSync(password, user[0].password)){
+            const token = genToken(user);
+
+            return res.status(200).json({
+                message:`${email} successfully logged in`,
+                jwt: token
+            });
+        } else {
+            return res.statu(404).json({
+                message:'user/password is wrong',
+            });
+        };
+
+    } catch(e) {
+        console.log(e)
+        res.status(500).json({
+            message: 'failed to login',
+            error: e
+        })
+    }
+};
+
+
+function genToken(user) {
+
+    // create the payload...
+    const payload = {
+            userid: user.id,
+            username: user.username,
+    }
+      const options = {
+          expiresIn: '1h'
+      };
+      const token = jwt.sign(payload, Secrets.jwtSecret, options);
+
+      return token;
 }
 
 
 
 export  {
     register,
-    deleteAll
+    deleteAll,
+    login
 }
