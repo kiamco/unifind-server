@@ -10,10 +10,12 @@ const server = Express();
 server.use(Express.json());
 server.use(Cors());
 server.use(Helmet());
+
 server.use(Auth)
 
 //establish connection to databse 
-const DB_CONNECTION = "mongodb://root:rootpassword@0.0.0.0:27017"
+// const DB_CONNECTION = "mongodb://root:rootpassword@0.0.0.0:27017"
+const DB_CONNECTION = "mongodb://localhost:27017/unfindDev"
 
 Mongoose.connect(DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true },(error) => {
     if(error){
