@@ -3,18 +3,22 @@ const Schema = Mongoose.Schema;
 
 const UserSchema = new Schema({
     name: {
-        type: String
+        type: String,
+        require:true
     },
     email: {
-        type: String
+        type: String,
+        require:true
+
     },
     password: {
-        type: String
+        type: String,
+        require:true
     },
 }, {
     timestamps: true
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = Mongoose.model('User', UserSchema);
 
 export default User
