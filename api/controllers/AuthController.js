@@ -35,6 +35,38 @@ const register = async (req,res) => {
     
 };
 
+const login = async (req,res) => {
+    const {email, password} = req.body;
+
+    try {
+        const user = await User.find({email: email});
+        console.log(user)
+
+        if(user.length > 0){
+            if (user && Bcrypt.compareSync(password, user[0].password)){
+                const token = genToken(user);
+    
+                return res.status(200).json({
+                    message:`${email} successfully logged in`,
+                    jwt: token
+                });
+            } 
+        } else {
+            return res.status(404).json({
+                message:'user/password is wrong',
+            });
+        };
+
+
+
+    } catch(e) {
+        console.log(e)
+        res.status(500).json({
+            message: 'failed to login',
+            error: e
+        })
+    }
+};
 
 const deleteAll = async (req,res) => {
     try{
@@ -49,35 +81,6 @@ const deleteAll = async (req,res) => {
             error: e
         });
     };
-};
-
-
-const login = async (req,res) => {
-    const {email, password} = req.body;
-
-    try {
-        const user = await User.find({email: email});
-
-        if (user && Bcrypt.compareSync(password, user[0].password)){
-            const token = genToken(user);
-
-            return res.status(200).json({
-                message:`${email} successfully logged in`,
-                jwt: token
-            });
-        } else {
-            return res.statu(404).json({
-                message:'user/password is wrong',
-            });
-        };
-
-    } catch(e) {
-        console.log(e)
-        res.status(500).json({
-            message: 'failed to login',
-            error: e
-        })
-    }
 };
 
 
