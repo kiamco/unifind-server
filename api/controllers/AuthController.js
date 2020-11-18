@@ -19,10 +19,11 @@ const register = async (req,res) => {
     //save new user to database
     try{
         const response = await user.save();
-        
+        const token = genToken(req.body)
         return res.status(200).json({
             message:`User ${name} created`,
-            response: response
+            response: response,
+            jwt: token
         });
 
     } catch(e) {
@@ -82,6 +83,7 @@ const deleteAll = async (req,res) => {
         });
     };
 };
+
 
 
 function genToken(user) {

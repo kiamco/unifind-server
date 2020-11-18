@@ -14,7 +14,7 @@ const Router = Express.Router();
 
 Router.post('/register', register);
 Router.delete('/deleteAll', deleteAll);
-Router.get('/login', login);
+Router.post('/login', login);
 
 
 
