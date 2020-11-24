@@ -41,7 +41,6 @@ const login = async (req,res) => {
 
     try {
         const user = await User.find({email: email});
-        console.log(user)
 
         if(user.length > 0){
             if (user && Bcrypt.compareSync(password, user[0].password)){
@@ -49,7 +48,9 @@ const login = async (req,res) => {
     
                 return res.status(200).json({
                     message:`${email} successfully logged in`,
-                    jwt: token
+                    jwt: token,
+                    username:user[0].name
+                    
                 });
             } 
         } else {

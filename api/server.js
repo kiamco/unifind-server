@@ -3,6 +3,9 @@ import Helmet from 'helmet';
 import Cors from 'cors';
 import Mongoose from 'mongoose';    
 import Auth from './routes/auth';
+import {config} from 'dotenv';
+
+config()
 
 const server = Express();
 
@@ -15,7 +18,8 @@ server.use(Auth)
 
 //establish connection to databse 
 // const DB_CONNECTION = "mongodb://root:rootpassword@0.0.0.0:27017"
-const DB_CONNECTION = "mongodb://localhost:27017/unfindDev"
+// const DB_CONNECTION = "mongodb://localhost:27017/unfindDev"
+const DB_CONNECTION = `mongodb+srv://admin:${process.env.MONGO_PASSWORD}@cluster0.ya0of.mongodb.net/cluster0?retryWrites=true&w=majority`;
 
 Mongoose.connect(DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true },(error) => {
     if(error){
