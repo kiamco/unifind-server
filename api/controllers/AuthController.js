@@ -19,10 +19,11 @@ const register = async (req,res) => {
     //save new user to database
     try{
         const response = await user.save();
-        
+        const token = genToken(req.body)
         return res.status(200).json({
             message:`User ${name} created`,
-            response: response
+            response: response,
+            jwt: token
         });
 
     } catch(e) {
@@ -35,6 +36,39 @@ const register = async (req,res) => {
     
 };
 
+const login = async (req,res) => {
+    const {email, password} = req.body;
+
+    try {
+        const user = await User.find({email: email});
+
+        if(user.length > 0){
+            if (user && Bcrypt.compareSync(password, user[0].password)){
+                const token = genToken(user);
+    
+                return res.status(200).json({
+                    message:`${email} successfully logged in`,
+                    jwt: token,
+                    username:user[0].name
+                    
+                });
+            } 
+        } else {
+            return res.status(404).json({
+                message:'user/password is wrong',
+            });
+        };
+
+
+
+    } catch(e) {
+        console.log(e)
+        res.status(500).json({
+            message: 'failed to login',
+            error: e
+        })
+    }
+};
 
 const deleteAll = async (req,res) => {
     try{
@@ -51,34 +85,6 @@ const deleteAll = async (req,res) => {
     };
 };
 
-
-const login = async (req,res) => {
-    const {email, password} = req.body;
-
-    try {
-        const user = await User.find({email: email});
-
-        if (user && Bcrypt.compareSync(password, user[0].password)){
-            const token = genToken(user);
-
-            return res.status(200).json({
-                message:`${email} successfully logged in`,
-                jwt: token
-            });
-        } else {
-            return res.statu(404).json({
-                message:'user/password is wrong',
-            });
-        };
-
-    } catch(e) {
-        console.log(e)
-        res.status(500).json({
-            message: 'failed to login',
-            error: e
-        })
-    }
-};
 
 
 function genToken(user) {
