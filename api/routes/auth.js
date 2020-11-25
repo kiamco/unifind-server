@@ -1,6 +1,6 @@
 import Express from 'express';
 import Dotenv from 'dotenv';
-import {register, deleteAll, login} from '../controllers/AuthController';
+import {register, deleteAll, login} from '../controllers/AuthController.js';
 
 
 Dotenv.config();

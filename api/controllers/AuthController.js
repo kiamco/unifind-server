@@ -1,7 +1,7 @@
-import User from '../models/users';
+import User from '../models/users.js';
 import Bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import Secrets from '../../config/secrets';
+import Secrets from '../../config/secrets.js';
 
 const register = async (req,res) => {
     const {name, password, email} = req.body;
