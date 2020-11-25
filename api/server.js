@@ -2,7 +2,7 @@ import Express from 'express';
 import Helmet from 'helmet';
 import Cors from 'cors';
 import Mongoose from 'mongoose';    
-import Auth from './routes/auth';
+import Auth from './routes/auth.js';
 import {config} from 'dotenv';
 
 config()
