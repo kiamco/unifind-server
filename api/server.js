@@ -3,8 +3,9 @@ import Helmet from 'helmet';
 import Cors from 'cors';
 import Mongoose from 'mongoose';    
 import Auth from './routes/auth.js';
-import {config} from 'dotenv';
+import dotenv from 'dotenv';
 
+const {config} = dotenv;
 config()
 
 const server = Express();
